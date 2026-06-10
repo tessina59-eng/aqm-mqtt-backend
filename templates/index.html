@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AQM Calibration Controller</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="glow-bg"></div>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <span class="pulse-dot"></span>
+                <h1>Smart Air Quality Monitoring System</h1>
+            </div>
+            <p class="subtitle">Calibration Parameters Control Center</p>
+        </header>
+
+        <main>
+            <section class="control-panel-grid">
+                <div class="panel-column">
+                    <div class="panel-header">
+                        <h2>Connection Status</h2>
+                    </div>
+                    <div class="glass-card status-card">
+                        <div class="status-indicator">
+                            <span class="pulse-dot green"></span>
+                            <div>
+                                <h4 id="gsm-status">GSM Downlink Active</h4>
+                                <p id="gsm-last-seen" class="text-hint">Waiting for device ping...</p>
+                            </div>
+                        </div>
+                        <div class="status-details">
+                            <div class="detail-row">
+                                <span>Ingest Endpoint:</span>
+                                <strong>/api/v1/data/ingest</strong>
+                            </div>
+                            <div class="detail-row">
+                                <span>Downlink Protocol:</span>
+                                <strong>HTTP JSON Payload</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel-column">
+                    <div class="panel-header">
+                        <h2>Latest GSM Telemetry</h2>
+                    </div>
+                    <div class="glass-card telemetry-card">
+                        <div class="telemetry-grid">
+                            <div class="telemetry-item">
+                                <span class="label">PM2.5</span>
+                                <div class="val-group"><strong id="tel-pm25">--</strong><span class="unit">µg/m³</span></div>
+                            </div>
+                            <div class="telemetry-item">
+                                <span class="label">CO2</span>
+                                <div class="val-group"><strong id="tel-co2">--</strong><span class="unit">ppm</span></div>
+                            </div>
+                            <div class="telemetry-item">
+                                <span class="label">CO</span>
+                                <div class="val-group"><strong id="tel-co">--</strong><span class="unit">ppm</span></div>
+                            </div>
+                            <div class="telemetry-item">
+                                <span class="label">Ozone</span>
+                                <div class="val-group"><strong id="tel-o3">--</strong><span class="unit">ppm</span></div>
+                            </div>
+                            <div class="telemetry-item">
+                                <span class="label">Temperature</span>
+                                <div class="val-group"><strong id="tel-temp">--</strong><span class="unit">°C</span></div>
+                            </div>
+                            <div class="telemetry-item">
+                                <span class="label">Humidity</span>
+                                <div class="val-group"><strong id="tel-hum">--</strong><span class="unit">%</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <form id="calibration-form">
+                <section class="parameter-grid">
+                    <!-- MQ-7 Card -->
+                    <div class="glass-card param-card">
+                        <div class="card-badge mq7">MQ-7</div>
+                        <h3>Carbon Monoxide (CO)</h3>
+                        <div class="inputs">
+                            <div class="input-field">
+                                <label for="co_gain">CO Gain</label>
+                                <input type="number" id="co_gain" step="0.001" value="1.000" required>
+                                <span class="input-hint">Multiplies PPM reading</span>
+                            </div>
+                            <div class="input-field">
+                                <label for="co_offset">CO Offset</label>
+                                <input type="number" id="co_offset" step="0.01" value="0.00" required>
+                                <span class="input-hint">Shifts PPM reading (+/-)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- MQ-131 Card -->
+                    <div class="glass-card param-card">
+                        <div class="card-badge mq131">MQ-131</div>
+                        <h3>Ozone (O<sub>3</sub>)</h3>
+                        <div class="inputs">
+                            <div class="input-field">
+                                <label for="o3_gain">O3 Gain</label>
+                                <input type="number" id="o3_gain" step="0.001" value="1.000" required>
+                                <span class="input-hint">Multiplies PPM reading</span>
+                            </div>
+                            <div class="input-field">
+                                <label for="o3_offset">O3 Offset</label>
+                                <input type="number" id="o3_offset" step="0.01" value="0.00" required>
+                                <span class="input-hint">Shifts PPM reading (+/-)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- MH-Z19C Card -->
+                    <div class="glass-card param-card">
+                        <div class="card-badge mhz19">MH-Z19C</div>
+                        <h3>Carbon Dioxide (CO<sub>2</sub>)</h3>
+                        <div class="inputs">
+                            <div class="input-field">
+                                <label for="co2_gain">CO2 Gain</label>
+                                <input type="number" id="co2_gain" step="0.001" value="1.000" required>
+                                <span class="input-hint">Multiplies PPM reading</span>
+                            </div>
+                            <div class="input-field">
+                                <label for="co2_offset">CO2 Offset</label>
+                                <input type="number" id="co2_offset" step="0.5" value="0.0" required>
+                                <span class="input-hint">Shifts PPM reading (+/-)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PMS5003 Card -->
+                    <div class="glass-card param-card">
+                        <div class="card-badge pms">PMS5003</div>
+                        <h3>Particulate Matter (PM2.5)</h3>
+                        <div class="inputs">
+                            <div class="input-field">
+                                <label for="pm25_gain">PM2.5 Gain</label>
+                                <input type="number" id="pm25_gain" step="0.001" value="1.000" required>
+                                <span class="input-hint">Multiplies µg/m³ reading</span>
+                            </div>
+                            <div class="input-field">
+                                <label for="pm25_offset">PM2.5 Offset</label>
+                                <input type="number" id="pm25_offset" step="0.5" value="0.0" required>
+                                <span class="input-hint">Shifts µg/m³ reading (+/-)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- DHT11 Card -->
+                    <div class="glass-card param-card">
+                        <div class="card-badge dht">DHT11</div>
+                        <h3>Temperature & Humidity</h3>
+                        <div class="inputs">
+                            <div class="input-field">
+                                <label for="temp_offset">Temp Offset (&deg;C)</label>
+                                <input type="number" id="temp_offset" step="0.1" value="0.0" required>
+                                <span class="input-hint">Applied directly to temperature</span>
+                            </div>
+                            <div class="input-field">
+                                <label for="hum_offset">Humidity Offset (%)</label>
+                                <input type="number" id="hum_offset" step="0.1" value="0.0" required>
+                                <span class="input-hint">Applied directly to humidity</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Actions Card -->
+                    <div class="glass-card action-card">
+                        <h3>Sync to Controller</h3>
+                        <p class="warning-text" style="border-left-color: var(--success-color);">Note: Updates are written to Flash storage and will load automatically on reboot.</p>
+                        <div class="action-buttons">
+                            <button type="submit" id="submit-btn" class="btn primary-btn">
+                                <span class="btn-text">Upload Calibration</span>
+                                <span class="spinner hidden"></span>
+                            </button>
+                            <button type="button" id="reset-defaults-btn" class="btn secondary-btn">Reset Defaults</button>
+                        </div>
+                    </div>
+                </section>
+            </form>
+
+            <section class="logs-section">
+                <div class="panel-header">
+                    <h2>Device Response Log</h2>
+                </div>
+                <div class="glass-card console-card">
+                    <div id="console-output" class="console-output">
+                        <div class="log-line system-msg">System initialized. Awaiting connection...</div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>Smart IoT Air Quality Monitoring System &copy; 2026. Arduino Due Interface.</p>
+        </footer>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast hidden">
+        <div class="toast-content">
+            <span class="toast-icon"></span>
+            <p id="toast-message"></p>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

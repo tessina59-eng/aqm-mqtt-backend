@@ -1,0 +1,13 @@
+{
+    "version": 1781088281,
+    "co_gain": 1.0,
+    "co_offset": 5.0,
+    "o3_gain": 1.0,
+    "o3_offset": 0.0,
+    "co2_gain": 1.0,
+    "co2_offset": 0.0,
+    "pm25_gain": 1.0,
+    "pm25_offset": 0.0,
+    "temp_offset": 0.0,
+    "hum_offset": 0.0
+}

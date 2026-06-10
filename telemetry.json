@@ -1,0 +1,22 @@
+{
+    "device_id": "NODE001",
+    "location": {
+        "latitude": -1.2921,
+        "longitude": 36.8219
+    },
+    "applied_cal_version": 1781088281,
+    "metrics": {
+        "pm1": 26,
+        "pm25": 38,
+        "pm10": 45,
+        "co": 5.0,
+        "co2": 514,
+        "o3": 0.0,
+        "wind_speed": 0.1,
+        "temperature": 22.0,
+        "humidity": 56.0,
+        "voc_index": 100,
+        "nox_index": 1
+    },
+    "timestamp": "2026-06-10 13:50:59"
+}
