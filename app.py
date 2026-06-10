@@ -1,6 +1,7 @@
 import os
 import json
 import time
+from datetime import datetime, timezone, timedelta
 import threading
 import paho.mqtt.client as mqtt_client
 from flask import Flask, render_template, jsonify, request
@@ -47,11 +48,17 @@ def save_json(filepath, data):
 def load_calibration(): return load_json(CALIBRATION_FILE, dict(DEFAULT_CALIBRATION))
 def save_calibration(data): return save_json(CALIBRATION_FILE, data)
 
+# Nairobi is UTC+3
+EAT_TZ = timezone(timedelta(hours=3))
+
+def get_local_time_str():
+    return datetime.now(EAT_TZ).strftime("%Y-%m-%d %H:%M:%S")
+
 def load_ack(): return load_json(ACK_FILE, {"acknowledged_version": 0, "ack_time": None})
 def save_ack(version):
     save_json(ACK_FILE, {
         "acknowledged_version": version,
-        "ack_time": time.strftime("%Y-%m-%d %H:%M:%S")
+        "ack_time": get_local_time_str()
     })
 
 # ── MQTT Client Setup ─────────────────────────────────────────────────────
@@ -70,7 +77,7 @@ def on_message(client, userdata, msg):
         
         # Telemetry Data
         if msg.topic.endswith("/data"):
-            data["timestamp"] = time.strftime("%Y-%m-%d %H:%M:%S")
+            data["timestamp"] = get_local_time_str()
             save_json(TELEMETRY_FILE, data)
             
             # Fallback ACK check (if status msg missed)
@@ -157,7 +164,16 @@ def get_calibration():
 
 @app.route("/api/v1/data/ingest", methods=["POST"])
 def ingest_data():
-    return jsonify({"status": "success", "message": "Migrated to MQTT"})
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({"status": "error", "message": "No JSON payload"}), 400
+            
+        data["timestamp"] = get_local_time_str()
+        save_json(TELEMETRY_FILE, data)
+        return jsonify({"status": "success", "message": "Telemetry received via HTTP"})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
 
 # ── Dashboard status poll ───────────────────────────────────────────────────
 @app.route("/api/status")
