@@ -10,13 +10,13 @@
         "pm25": 38,
         "pm10": 45,
         "co": 5.0,
-        "co2": 514,
+        "co2": 542,
         "o3": 0.0,
         "wind_speed": 0.1,
-        "temperature": 22.0,
+        "temperature": 22.1,
         "humidity": 56.0,
         "voc_index": 100,
         "nox_index": 1
     },
-    "timestamp": "2026-06-10 13:50:59"
+    "timestamp": "2026-06-10 13:58:01"
 }
