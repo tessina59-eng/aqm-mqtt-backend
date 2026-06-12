@@ -22,7 +22,8 @@ document.addEventListener('DOMContentLoaded', () => {
         o3_gain: "1.000", o3_offset: "0.00",
         co2_gain: "1.000", co2_offset: "0.0",
         pm25_gain: "1.000", pm25_offset: "0.0",
-        temp_offset: "0.0", hum_offset: "0.0"
+        temp_offset: "0.0", hum_offset: "0.0",
+        send_interval_s: "60"
     };
 
     let lastTelemetryTimestamp = null;

@@ -25,7 +25,8 @@ DEFAULT_CALIBRATION = {
     "o3_gain":      1.0,  "o3_offset":    0.0,
     "co2_gain":     1.0,  "co2_offset":   0.0,
     "pm25_gain":    1.0,  "pm25_offset":  0.0,
-    "temp_offset":  0.0,  "hum_offset":   0.0
+    "temp_offset":  0.0,  "hum_offset":   0.0,
+    "send_interval_s": 60
 }
 
 def load_json(filepath, default):
@@ -139,7 +140,8 @@ def send_calibration():
             "pm25_gain":    float(data.get("pm25_gain",   1.0)),
             "pm25_offset":  float(data.get("pm25_offset", 0.0)),
             "temp_offset":  float(data.get("temp_offset", 0.0)),
-            "hum_offset":   float(data.get("hum_offset",  0.0))
+            "hum_offset":   float(data.get("hum_offset",  0.0)),
+            "send_interval_s": int(data.get("send_interval_s", 60))
         }
     except (ValueError, TypeError) as e:
         return jsonify({"success": False, "message": f"Invalid values: {e}"}), 400

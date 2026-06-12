@@ -4,19 +4,19 @@
         "latitude": -1.2921,
         "longitude": 36.8219
     },
-    "applied_cal_version": 1781089635,
+    "applied_cal_version": 1781262274,
     "metrics": {
-        "pm1": 26,
-        "pm25": 38,
-        "pm10": 45,
-        "co": 6.98,
-        "co2": 588,
+        "pm1": 24,
+        "pm25": 35,
+        "pm10": 41,
+        "co": 3.0,
+        "co2": 437,
         "o3": 0.0,
-        "wind_speed": 0.1,
-        "temperature": 22.2,
+        "wind_speed": 0.0,
+        "temperature": 23.3,
         "humidity": 56.0,
         "voc_index": 100,
         "nox_index": 1
     },
-    "timestamp": "2026-06-10 14:09:03"
+    "timestamp": "2026-06-12 14:36:15"
 }
